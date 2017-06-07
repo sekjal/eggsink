@@ -1,0 +1,7 @@
+{
+    "require": {
+        "google/apiclient": "^2.0",
+	"php-ews/php-ews": "dev-master"
+    },
+    "minimum-stability" : "dev"
+}
