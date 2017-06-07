@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/vendor/google-api-php-client/src/Google/autoload.php';
+require_once dirname(__FILE__) . '/vendor/autoload.php';
 
 function php_ews_autoload($class_name)
 {
