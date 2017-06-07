@@ -7,7 +7,11 @@ EggSink is a script for synchronizing data between Microsoft Exchange Server and
 **_NOTE: EggSink currently only does one-way synchronization of events from an Exchange calendar to Google Calendar._**
 
 ## Installation
-EggSink Uses https://github.com/jamesiarmes/php-ews to talk to Exchange Web Services and https://github.com/google/google-api-php-client to talk to the Google Calendar. Both libraries are included in hte project, but may be setup using Composer in the future. 
+
+### Requirements
+* https://github.com/jamesiarmes/php-ews to talk to Exchange Web Services
+* https://github.com/google/google-api-php-client to talk to the Google Calendar
+Both can be installed with Composer.
 
 EggSink also requires at least PHP 5.4.
 
@@ -18,18 +22,19 @@ To configure, create a config directory in the root of the project, and place a 
 
 ```php
 const SYNC_DAYS_FROM_NOW = 1; // number of days in the future to sync
+const RETRIES = 5; // number of retries to connect to Exchange server
 
 const EXCHANGE_SERVER = ''; // the hostname of the Exchange server
 const EXCHANGE_USERNAME = ''; // the username for the Exchange server
 const EXCHANGE_PASSWORD = ''; // the password for the Exchange server
 
-const GOOGLE_CALENDAR_ID = ''; // the ID of the Google Calendar being synced
+const GOOGLE_CALENDAR_ID = ''; // the ID of the Google Calendar being synced; use 'primary' for the default calendar
 const GOOGLE_CLIENT_ID = ''; // Google Calendar API service account client ID
 const GOOGLE_EMAIL = ''; // Google Calendar API service account email
-const GOOGLE_KEY_FILE = '*.p12'; // Google Calendar API service account p12 file name
+const GOOGLE_KEY_FILE = '*.json'; // Google Calendar API service account json file name
 ```
 
-Make sure the P12 file is also placed into the config directory.
+Make sure the .json key file is also placed into the config directory.
 
 ## Usage
 To run the script (assuming php is in the path and already in the EggSink project directory), use the command line:

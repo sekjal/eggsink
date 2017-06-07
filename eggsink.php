@@ -4,16 +4,17 @@ require_once dirname(__FILE__) . '/autoload.php';
 require_once dirname(__FILE__) . '/config/config.php';
 
 addToLog('Started eggsink');
-for ($i=1; $i<=5; $i++) {
+for ($i=1; $i<=RETRIES; $i++) {
     try
     {
         $exchange = new ExchangeClient(EXCHANGE_SERVER, EXCHANGE_USERNAME, EXCHANGE_PASSWORD);
         $meetings = $exchange->getCalendarEvents(SYNC_DAYS_FROM_NOW);
         break;
     } catch (Exception $e) {
-        if ($i==5)
+        if ($i==$retries)
         {
             addToLog('Failed to connect to Exchange. Please try again later.');
+	    addToLog($e);
             exit(0);
         }
     }
@@ -30,6 +31,7 @@ foreach ($events as $event) {
         $ewsEvents[$event['ewsId']] = $event;
     }
 }
+
 
 // Add or update events
 foreach ($meetings as $meeting) {
@@ -54,11 +56,11 @@ foreach ($meetings as $meeting) {
             $google->updateEvent($ewsEvents[$meeting['id']]['id'], $details);
         }
         unset($ewsEvents[$meeting['id']]); // remove the event from the remaining events queue
-
+	addToLog($details['subject'] . ' updated');
     } else { // This must be a new meeting
 
         $event = $google->addEvent($details);
-
+	addToLog('created');
     }
 
 }
