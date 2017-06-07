@@ -70,11 +70,13 @@ class GoogleCalendarClient
 
             $items[] = [
                 'id' => $event->getId(),
+		'etag' => $event->getEtag(),
                 'subject' => $event->getSummary(),
                 'start' => $start,
                 'end' => $end,
                 'isAllDayEvent' => $isAllDayEvent,
-                'location' => $event->getLocation(),
+		'isBusyStatus' => ($event->getTransparency == 'opaque'),
+                'location' => $event->getLocation() ? $event->getLocation() : null,
                 'ewsId' => $ewsId,
                 'ewsChangeKey' => $ewsChangeKey
             ];
