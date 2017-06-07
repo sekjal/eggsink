@@ -14,11 +14,23 @@ class GoogleCalendarClient
     {
         $client = new Google_Client();
         $client->setApplicationName($appName);
-        $key = file_get_contents($keyFile);
-        $cred = new Google_Auth_AssertionCredentials($email, $this->scopes, $key);
-        $client->setAssertionCredentials($cred);
+	$client->setAuthConfig($keyFile);
+	$client->setScopes($this->scopes);
+/*
+	$scope = new Google_Service_Calendar_AclRuleScope();
+	$scope->setType('user');
+	$scope->setValue( $email );
+
+	$rule = new Google_Service_Calendar_AclRule();
+	$rule->setRole( 'owner' );
+	$rule->setScope( $scope );
+*/
         $this->client = new Google_Service_Calendar($client);
+//	$result = $this->client->acl->insert($calendarId, $rule);
+
         $this->calendarId = $calendarId;
+
+
     }
 
     /**
@@ -27,7 +39,6 @@ class GoogleCalendarClient
      */
     public function getEvents($daysFromNow)
     {
-
         $options = [
             'singleEvents' => true,
             'orderBy' => 'startTime',
@@ -35,7 +46,6 @@ class GoogleCalendarClient
             'timeMax' => date(DATE_RFC3339, strtotime('+' . $daysFromNow . ' days'))
         ];
         $events = $this->client->events->listEvents($this->calendarId, $options);
-
         $items = [];
         /** @var Google_Service_Calendar_Event $event */
         foreach ($events as $i => $event) {
@@ -119,5 +129,7 @@ class GoogleCalendarClient
 
         return $event;
     }
+
 }
+
 
